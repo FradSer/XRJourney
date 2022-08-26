@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/ChineseTest.unity
+    guid: 4164b787c5ec04bfa992f4ad5492dc68
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: be613b11df63347f597a1402333e3421, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e2c47ded1b82d4111b961d7d0cfe01fb, type: 2}
