@@ -147,6 +147,7 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   - {fileID: -1949198440130598917, guid: a370ac41fb7a54dce9c4b2b526db82ec, type: 2}
   - {fileID: -7198014792395963070, guid: e2c47ded1b82d4111b961d7d0cfe01fb, type: 2}
   - {fileID: 11400000, guid: be613b11df63347f597a1402333e3421, type: 2}
@@ -442,7 +443,7 @@ PlayerSettings:
     m_Automatic: 1
   - m_BuildTarget: WindowsStandaloneSupport
     m_APIs: 1200000002000000
-    m_Automatic: 0
+    m_Automatic: 1
   - m_BuildTarget: MacStandaloneSupport
     m_APIs: 10000000
     m_Automatic: 1
