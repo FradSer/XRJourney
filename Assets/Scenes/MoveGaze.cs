@@ -7,7 +7,7 @@ public class MoveGaze: MonoBehaviour {
   private float startTime;
   private GameObject attachedObject = null;
   private GameObject lookedatObject = null;
-
+  
   // Start is called before the first frame update
   void Start() {
     startTime = Time.time;
@@ -27,8 +27,11 @@ public class MoveGaze: MonoBehaviour {
           attachedObject = lookedatObject;
           attachedObject.GetComponent < Rigidbody > ().useGravity = false;
           attachedObject.GetComponent < Rigidbody > ().isKinematic = false;
-          attachedObject.transform.parent = this.transform;
+          // Set the position of the object to the position of the CenterEyeObject
+          // attachedObject.transform.parent = this.transform;
           attachedObject.GetComponent < Renderer > ().material.color = Color.red;
+          // Trigger the animation
+          attachedObject.GetComponent < Animator > ().SetTrigger("Sight Into");
         } else {
           // If less than 2 seconds make it the looked at object and turn it blue
           if (lookedatObject == null) {
