@@ -1,57 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveGaze: MonoBehaviour {
-    
-  private float startTime;
-  private GameObject attachedObject = null;
-  private GameObject lookedatObject = null;
-  private bool dockHasMovedForward = false;
-  
-  // Start is called before the first frame update
-  void Start() {
-    startTime = Time.time;
+public class MoveGaze : MonoBehaviour
+{
+  private static readonly int SightInto = Animator.StringToHash("Sight Into");
+  private static readonly int SightOut = Animator.StringToHash("Sight Out");
+
+  public GameObject dock;
+  public GameObject dockDisabler;
+
+  private Animator _animator;
+  private float _gazeTimer;
+  private bool _hasTriggered;
+  private bool _isGazing;
+  private GameObject _lookedAtObject;
+
+  private void Start()
+  {
+    _animator = dock.GetComponent<Animator>();
+    _gazeTimer = 0f;
+    _isGazing = false;
+    _hasTriggered = false;
   }
 
-  // Update is called once per frame
-  void Update() {
-    Ray ray = new Ray(transform.position, transform.forward);
-    RaycastHit hit;
-    
-    float currentTime = Time.time;
+  private void Update()
+  {
+    var rayTransform = transform;
+    var ray = new Ray(rayTransform.position, rayTransform.forward);
 
-    if (attachedObject == null) {
-      // Check to see if the ray cast from the CenterEyeObject hit anything
-      if (Physics.Raycast(ray, out hit, 100)) {
-        // If the ray cast has hit something check to see if it has been for longer than 0.2 seconds
-        if ((currentTime - startTime) > 0.2) {
-          attachedObject = lookedatObject;
-          dockState = 2;
-          if (dockHasMovedForward == false) {
-            attachedObject.GetComponent < Animator > ().SetTrigger("Sight Into");
-            dockHasMovedForward = true;
-          }
-        } else {
-          // If less than 0.2 seconds make it the looked at object
-          if (lookedatObject == null) {
-            lookedatObject = hit.collider.gameObject;
-          }
-        }
-      } else {
-        // If the ray isn't hitting anything
-        if (lookedatObject != null) {
-          lookedatObject.GetComponent < Renderer > ().material.color = Color.white;
-        }
-        startTime = currentTime;
-        lookedatObject = null;
-      }
-    } else {
-      // If the attached object is not null, check to see if it has been put down.
-      if (attachedObject.GetComponent < Renderer > ().material.color == Color.white) {
-        startTime = currentTime;
-        attachedObject = null;
-      }
+    if (!Physics.Raycast(ray, out var hit, 100f)) return;
+    _lookedAtObject = hit.collider.gameObject;
+    if (_lookedAtObject == dock)
+    {
+      _gazeTimer += Time.deltaTime;
+      _isGazing = true;
+      if (!(_gazeTimer > 0.1f) || _hasTriggered) return;
+      _animator.SetTrigger(SightInto);
+      _hasTriggered = true;
+    }
+    else if (_isGazing & (_lookedAtObject == dockDisabler))
+    {
+      _animator.SetTrigger(SightOut);
+      _gazeTimer = 0f;
+      _isGazing = false;
+      _hasTriggered = false;
     }
   }
 }
